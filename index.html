@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❤️ Elifime ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+height:100vh;
+background: radial-gradient(circle at center,#1a001a,#000);
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+font-family:Arial, sans-serif;
+color:white;
+}
+
+button{
+padding:18px 30px;
+font-size:20px;
+border:none;
+border-radius:15px;
+background:#ff2d75;
+color:white;
+box-shadow:0 0 20px #ff2d75;
+cursor:pointer;
+}
+
+.heart{
+position:absolute;
+width:18px;
+height:18px;
+background:#ff2d75;
+transform:rotate(45deg);
+}
+
+.heart::before,
+.heart::after{
+content:"";
+position:absolute;
+width:18px;
+height:18px;
+background:#ff2d75;
+border-radius:50%;
+}
+
+.heart::before{top:-9px;left:0;}
+.heart::after{left:-9px;top:0;}
+
+#bigHeart{
+display:none;
+font-size:120px;
+animation:pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+from{transform:scale(1);}
+to{transform:scale(1.2);}
+}
+
+#envelope{
+display:none;
+position:relative;
+width:130px;
+height:90px;
+background:#fff;
+border-radius:8px;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+#flap{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#ff2d75;
+clip-path:polygon(0 0,100% 0,50% 50%);
+transform-origin:top;
+transition:transform 1s;
+}
+
+/* MEKTUP TEMA */
+#letter{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+padding:50px 25px;
+transform:translateY(100%);
+transition:transform 1s;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+line-height:1.7;
+
+/* Arka plan */
+background:
+radial-gradient(circle at top, rgba(255,255,255,0.6), transparent 60%),
+linear-gradient(135deg, #fff8f0, #ffe6f0);
+
+color:#4a2c2c;
+font-size:19px;
+box-shadow: inset 0 0 50px rgba(0,0,0,0.15);
+}
+
+/* Kağıt dokusu */
+#letter::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background-image: repeating-linear-gradient(
+0deg,
+rgba(0,0,0,0.02),
+rgba(0,0,0,0.02) 2px,
+transparent 2px,
+transparent 4px
+);
+pointer-events:none;
+}
+
+#text{
+white-space:pre-line;
+margin-top:20px;
+z-index:2;
+}
+
+.cursor{
+display:inline-block;
+width:2px;
+background:#4a2c2c;
+margin-left:3px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop preload="auto">
+<source src="muzik.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="start()">❤️ tap hir pilis ❤️</button>
+
+<div id="bigHeart">❤️</div>
+
+<div id="envelope" onclick="openLetter()">
+<div id="flap"></div>
+</div>
+
+<div id="letter">
+<h2>Sevgilimmm 💌</h2>
+<p id="text"></p>
+<span class="cursor"></span>
+</div>
+
+<script>
+
+const message = `Sen hayatıma gelince
+her şey daha anlamlı oldu.
+
+Kalbim artık tek değil,
+seninle tamam.
+
+Seninle geçen her gün
+en güzel hatıra oluyor.
+
+14 Şubatımız kutlu olsun ❤️`;
+
+function createHearts(){
+for(let i=0;i<30;i++){
+let heart=document.createElement("div");
+heart.className="heart";
+heart.style.left=Math.random()*window.innerWidth+"px";
+heart.style.top=Math.random()*window.innerHeight+"px";
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.style.transition="all 1.5s ease";
+heart.style.left=window.innerWidth/2+"px";
+heart.style.top=window.innerHeight/2+"px";
+},50);
+
+setTimeout(()=>{heart.remove();},2000);
+}
+}
+
+function start(){
+document.querySelector("button").style.display="none";
+
+let music=document.getElementById("music");
+music.volume=0.8;
+music.play().catch(e=>console.log("Müzik engellendi"));
+
+createHearts();
+
+setTimeout(()=>{
+document.getElementById("bigHeart").style.display="block";
+},2000);
+
+setTimeout(()=>{
+document.getElementById("bigHeart").style.display="none";
+document.getElementById("envelope").style.display="block";
+},4000);
+}
+
+function openLetter(){
+document.getElementById("flap").style.transform="rotateX(180deg)";
+setTimeout(()=>{
+document.getElementById("letter").style.transform="translateY(0)";
+typeWriter();
+},800);
+}
+
+function typeWriter(){
+let i=0;
+let speed=35;
+const textElement=document.getElementById("text");
+
+function typing(){
+if(i<message.length){
+textElement.innerHTML+=message.charAt(i);
+i++;
+setTimeout(typing,speed);
+}
+}
+typing();
+}
+
+</script>
+
+</body>
+</html>
